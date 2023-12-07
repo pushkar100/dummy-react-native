@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {Navigation} from 'react-native-navigation';
 import {View, Text, TextInput, Button, StyleSheet} from 'react-native';
-import {doBasicAuthLogin, fetchSessionInfo} from '../utils';
+import {fetchSessionInfo} from '../utils';
 
-const BasicAuthScreen = ({tsHost, componentId}: any) => {
+const TrustedAuthCookielessScreen = ({tsHost}: any) => {
   const [username, onChangeUsername] = useState();
   const [password, onChangePassword] = useState();
   const [authSuccess, setAuthSuccess] = useState(false);
@@ -11,42 +10,22 @@ const BasicAuthScreen = ({tsHost, componentId}: any) => {
   const [infoCallSuccess, setInfoCallSuccess] = useState(false);
   const [infoCallError, setInfoCallError] = useState(false);
 
-  const onPressBasicAuthLogin = () => {
-    doBasicAuthLogin({tsHost, username, password})
-      .then(res => {
-        setAuthSuccess(true);
-        setAuthError(false);
-      })
-      .catch(err => {
-        setAuthError(true);
-        setAuthSuccess(false);
-      });
+  const onPressTrustedAuthCookielessLogin = () => {
+    console.log('onPressTrustedAuthCookielessLogin');
   };
 
   const onPressMakeInfoCall = () => {
     fetchSessionInfo({tsHost})
-      .then(res => {
-        setInfoCallSuccess(true);
-        setInfoCallError(false);
-      })
+      .then(res => setInfoCallSuccess(true))
       .catch(err => {
         console.log('error', err);
         setInfoCallError(true);
-        setInfoCallSuccess(false);
       });
-  };
-
-  const onViewNetworkLoginScreen = () => {
-    Navigation.push(componentId, {
-      component: {
-        name: 'NetworkLoggerScreen',
-      },
-    });
   };
 
   return (
     <View style={styles.container}>
-      <Text>Test Basic Auth</Text>
+      <Text>Test Trusted Auth Cookieless</Text>
       <TextInput
         style={styles.input}
         onChangeText={onChangeUsername}
@@ -60,10 +39,10 @@ const BasicAuthScreen = ({tsHost, componentId}: any) => {
         placeholder="Password"
       />
       <Button
-        onPress={onPressBasicAuthLogin}
-        title="Basic Auth Login"
+        onPress={onPressTrustedAuthCookielessLogin}
+        title="Trusted Auth Cookieless Login"
         color="#841584"
-        accessibilityLabel="Basic Auth Login"
+        accessibilityLabel="Trusted Auth Cookieless Login"
       />
       {authSuccess && (
         <View style={styles.authResult}>
@@ -96,22 +75,14 @@ const BasicAuthScreen = ({tsHost, componentId}: any) => {
           </View>
         )}
       </View>
-      <View style={styles.viewNetworkRequests}>
-        <Button
-          onPress={onViewNetworkLoginScreen}
-          title="Check network requests"
-          color="orange"
-          accessibilityLabel="Check network requests"
-        />
-      </View>
     </View>
   );
 };
 
-BasicAuthScreen.options = {
+TrustedAuthCookielessScreen.options = {
   topBar: {
     title: {
-      text: 'Basic Auth',
+      text: 'Trusted Auth',
     },
   },
 };
@@ -144,10 +115,6 @@ const styles = StyleSheet.create({
     margin: 12,
     padding: 10,
   },
-  viewNetworkRequests: {
-    margin: 12,
-    padding: 10,
-  },
 });
 
-export default BasicAuthScreen;
+export default TrustedAuthCookielessScreen;
